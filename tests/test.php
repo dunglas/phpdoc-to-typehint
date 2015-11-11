@@ -10,6 +10,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 // Cannot use PHPUnit right now because of this bug: https://github.com/phpDocumentor/Reflection/issues/85
 
 require __DIR__.'/../vendor/autoload.php';

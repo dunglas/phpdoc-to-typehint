@@ -155,7 +155,7 @@ foreach ($project->getFiles() as $file) {
 
 namespace bar;
 
-class BazTrait
+trait BazTrait
 {
     /**
      * @param int $a
@@ -169,6 +169,39 @@ class BazTrait
 
 PHP
     , $converter->convert($project, $file));
+}
+
+$projectFactory = ProjectFactory::createInstance();
+$childPath = __DIR__.'/Fixtures/Child.php';
+$project = $projectFactory->create('inheritance', [$childPath, __DIR__.'/Fixtures/Foo.php', __DIR__.'/Fixtures/BarInterface.php']);
+
+foreach ($project->getFiles() as $path => $file) {
+    if ($childPath === $path) {
+        same(<<<'PHP'
+<?php
+
+namespace bar;
+
+class Child extends Foo implements BarInterface
+{
+    use BazTrait;
+
+    public function test(float $a)
+    {
+        parent::test($a);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function baz(array $a, int $b): float
+    {
+    }
+}
+
+PHP
+        , $converter->convert($project, $file));
+    }
 }
 
 echo 'Good job! Everything is fine.'.PHP_EOL;

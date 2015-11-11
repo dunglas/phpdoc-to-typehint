@@ -13,7 +13,10 @@ namespace Dunglas\PhpDocToTypeHint;
 
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
+use phpDocumentor\Reflection\Fqsen;
+use phpDocumentor\Reflection\Php\Class_;
 use phpDocumentor\Reflection\Php\File;
+use phpDocumentor\Reflection\Php\Interface_;
 use phpDocumentor\Reflection\Php\Project;
 use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Null_;
@@ -252,13 +255,98 @@ class Converter
         }
 
         $fqsen = $namespace.'\\'.$object;
-        $function = sprintf('%s::%s()', $fqsen, $function);
+        $fqfunction = sprintf('%s::%s()', $fqsen, $function);
 
         foreach ($project->getFiles() as $file) {
             foreach ($file->$method() as $obj) {
                 if ($obj->getFqsen()->__toString() === $fqsen) {
-                    return $this->getDocBlockForFunction($obj->getMethods(), $function);
+                    $docBlock = $this->getDocBlockForFunction($obj->getMethods(), $fqfunction);
+
+                    if (
+                        self::OBJECT_TRAIT === $objectType ||
+                        (null !== $docBlock && 0 !== strcasecmp('{@inheritdoc}', trim($docBlock->getSummary())))
+                    ) {
+                        return $docBlock;
+                    }
+
+                    if ($obj instanceof Class_) {
+                        if ($docBlock = $this->getDocBlockForInterfaces($project, $obj->getInterfaces(), $function)) {
+                            return $docBlock;
+                        }
+
+                        $parentFqsen = $obj->getParent();
+                        if (!$parent = $this->getObject($project, $parentFqsen, self::OBJECT_CLASS)) {
+                            return;
+                        }
+
+                        return $this->getDocBlock($project, self::OBJECT_CLASS, $this->getNamespace($parentFqsen), $parent->getName(), $function);
+                    }
+
+                    if ($obj instanceof Interface_ && $docBlock = $this->getDocBlockForInterfaces($project, $obj->getParents(), $function)) {
+                        return $docBlock;
+                    }
                 }
+            }
+        }
+    }
+
+    /**
+     * Extracts a namespace from a FQSEN.
+     *
+     * @param Fqsen $fqsen
+     *
+     * @return string
+     */
+    private function getNamespace(Fqsen $fqsen): string
+    {
+        $value = $fqsen->__toString();
+        return substr($value, 0, strrpos($value, '\\'));
+    }
+
+    /**
+     * Finds a Class_ or an Interface_ instance using its FQSEN.
+     *
+     * @param Project $project
+     * @param Fqsen   $fqsen
+     * @param int     $objectType
+     *
+     * @return Class_|Interface_|null
+     */
+    private function getObject(Project $project, Fqsen $fqsen, int $objectType)
+    {
+        $method = self::OBJECT_CLASS === $objectType ? 'getClasses' : 'getInterfaces';
+
+        foreach ($project->getFiles() as $file) {
+            foreach ($file->$method() as $object) {
+                if ($object->getFqsen()->__toString() === $fqsen->__toString()) {
+                    return $object;
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets a DocBlock from an array of interfaces FQSEN instances.
+     *
+     * @param Project $project
+     * @param Fqsen[] $fqsens
+     * @param string  $function
+     *
+     * @return DocBlock|null
+     */
+    private function getDocBlockForInterfaces(Project $project, array $fqsens, string $function)
+    {
+        foreach ($fqsens as $fqsen) {
+            $object = $this->getObject($project, $fqsen, self::OBJECT_INTERFACE);
+
+            if (!$object) {
+                continue;
+            }
+
+            $docBlock = $this->getDocBlock($project, self::OBJECT_INTERFACE, $this->getNamespace($fqsen), $object->getName(), $function);
+
+            if ($docBlock) {
+                return $docBlock;
             }
         }
     }
@@ -278,17 +366,7 @@ class Converter
                 continue;
             }
 
-            // TODO: handle inheritance
-
-            if (!$docBlock = $reflectionFunction->getDocblock()) {
-                return;
-            }
-
-            // TODO: handle {@inheritdoc}
-
-            // TODO: cache this for performance
-
-            return $docBlock;
+            return $reflectionFunction->getDocblock();
         }
     }
 

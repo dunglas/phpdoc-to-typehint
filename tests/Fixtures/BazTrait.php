@@ -2,7 +2,7 @@
 
 namespace bar;
 
-class BazTrait
+trait BazTrait
 {
     /**
      * @param int $a

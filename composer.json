@@ -1,0 +1,21 @@
+{
+  "name": "dunglas/phpdoc-to-typehint",
+  "license": "MIT",
+  "type": "project",
+  "description": "Generate scalar type hints from PHPDoc annotations",
+  "autoload": {
+    "psr-4": { "Dunglas\\PhpDocToTypeHint\\": "src/" }
+  },
+  "autoload-dev": {
+    "psr-4": { "Dunglas\\PhpDocToTypeHint\\Tests\\": "tests/" }
+  },
+  "require": {
+    "php": ">=7.0.0",
+    "ext-tokenizer": "*",
+    "symfony/console": "^2.7.0",
+    "symfony/finder": "^2.7.0",
+    "phpdocumentor/reflection": "^2.0@dev",
+    "phpdocumentor/reflection-common": "^1.0@dev",
+    "phpdocumentor/reflection-docblock": "^3.0@dev"
+  }
+}

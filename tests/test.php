@@ -1,6 +1,5 @@
-<?php
-
 #!/usr/bin/env php
+<?php
 
 /*
  * This file is part of the PHPDoc to Type Hint package.

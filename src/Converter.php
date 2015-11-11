@@ -456,7 +456,7 @@ class Converter
             }
 
             if (!$type1 instanceof Null_ && $type0 instanceof Null_) {
-                return [$type1>__toString(), true];
+                return [$type1->__toString(), true];
             }
 
             // Mixed types, cannot guess

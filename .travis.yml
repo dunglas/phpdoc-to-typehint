@@ -23,5 +23,7 @@ deploy:
   api_key:
     secure: NhylfeFBkWF6/tIm/kYEoSRJs9GW5AQ9+jMIg8N78Kyimz3fWSCNMrxLVYbiie3oQUul5K870H8kp28+17pPo8JsLOrQ2ghcFSLm7mxpmSdqBGsjAxa/bZHom7llYsncV1evq69gPZ6b/wnSg5lEt2r/ikt1/xAewB/yfrg8KXfVmiaiz1/svBY2TU5T00xBQknmnlgtCNhC8p9RaEFWdSQkGzATcA07hTS+r5+VMqEvCSdbHFd1YwHSaZvXkanjCixvHqGYTDbgm0kF/sltGYkWvTwKOkhR7cIrkO0Dey/fVf3Boycrw3Or2iCQ0rcll3pCxSR9VBuX+5zqIlaEWCrBMLuKp7q/lEUBp9saKQe/0vARDlc6C7UMIzW4awy8MLO30KbSDoVCGROPwgBGyPpTwjfR94A/fNlD+Cks5PtbSPuw908zzla8pMuv0GPIKpnKYc58DVrFCketv7o5KBo9QhO2uKyrltypUXNMQ65MnwyHQ75cSxRh/fEkfeKod6xIHhe994Q3CznNIe851nEbdCbyFk3KJpPmUpkcXTdS744z29DdHU32lHY1+G6ziVpsv4EVmJugNmFC4omG4v+Odu3J1WhVr2kJXWUPuUI2AASpj6szeo+jeDTMfO6sk99xqSpJ9xar7OP0W8R69bydsbtaMjFAr98q7CjShUo=
   file: phpdoc-to-typehint.phar
+  skip_cleanup: true
   on:
+    tags: true
     repo: dunglas/phpdoc-to-typehint

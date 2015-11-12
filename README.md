@@ -52,6 +52,15 @@ function bar(int $a = null, string $b, bool $c, callable $d = null) : float
 }
 ```
 
+## Features
+
+Supports:
+
+* functions
+* methods of classes and traits
+* method definitions in interfaces
+* PHPDoc inheritance
+
 ## Credits
 
 Created by [Kévin Dunglas](https://dunglas.fr). Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).

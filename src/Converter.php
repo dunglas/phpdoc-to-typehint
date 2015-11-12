@@ -55,6 +55,7 @@ class Converter
         $objectType = self::OBJECT_FUNCTION;
         $outputTypeHint = true;
         $outputDefaultValue = false;
+        $outputReturn = true;
         $namespace = null;
         $object = null;
         $function = null;
@@ -70,6 +71,12 @@ class Converter
                         }
                         break;
 
+                    case ':':
+                        if (null !== $function) {
+                            $outputReturn = false;
+                        }
+                    break;
+
                     case ')':
                         if ($insideFunctionSignature) {
                             if ($outputDefaultValue) {
@@ -77,19 +84,6 @@ class Converter
                             }
 
                             $insideFunctionSignature = false;
-
-                            if (null !== $function) {
-                                $return = $this->getReturn($project, $objectType, $namespace, $object, $function);
-                                if ($return && $return[0] && !$return[1]) {
-                                    $output .= sprintf('): %s', $return[0]);
-                                } else {
-                                    $output .= ')';
-                                }
-
-                                $function = null;
-
-                                continue 2;
-                            }
                         }
                         break;
 
@@ -105,9 +99,27 @@ class Converter
                         }
                         break;
 
+                    case ';':
                     case '{':
-                        ++$level;
-                        break;
+                        if (null !== $function && $outputReturn) {
+                            $return = $this->getReturn($project, $objectType, $namespace, $object, $function);
+
+                            if ($return && $return[0] && !$return[1]) {
+                                $output .= sprintf(': %s', $return[0]);
+                            }
+
+                            $function = null;
+                            $outputReturn = false;
+                        }
+
+                        if ('{' === $token) {
+                            ++$level;
+                        }
+
+                        if (';' === $token && $insideNamespace) {
+                            $insideNamespace = false;
+                        }
+                    break;
 
                     case '}':
                         --$level;
@@ -116,12 +128,6 @@ class Converter
                             $objectType = self::OBJECT_FUNCTION;
                         }
                         break;
-
-                    case ';':
-                        if ($insideNamespace) {
-                            $insideNamespace = false;
-                        }
-                    break;
                 }
 
                 $output .= $token;
@@ -183,6 +189,7 @@ class Converter
                 case T_FUNCTION:
                     $outsideFunctionSignature = true;
                     $outputDefaultValue = false;
+                    $outputReturn = true;
                     break;
 
                 case T_VARIABLE:

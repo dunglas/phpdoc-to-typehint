@@ -33,3 +33,14 @@ function bar(\DateTime $a = null, array $b, $c, $d, bool $e, callable $f = null)
 function baz($a)
 {
 }
+
+/**
+ * Must not be converted (already using type hints).
+ *
+ * @param int $a
+ *
+ * @return string
+ */
+function bat(int $a): string
+{
+}

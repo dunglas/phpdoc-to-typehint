@@ -57,8 +57,8 @@ function foo()
  *
  * @return float
  */
-function bar(\DateTime $a = null, array $b, int $c = null, string $d, bool $e, callable $f = null): float
-{
+function bar(\DateTime $a = null, array $b, int $c = null, string $d, bool $e, callable $f = null)
+: float{
     return 0.0;
 }
 
@@ -66,6 +66,17 @@ function bar(\DateTime $a = null, array $b, int $c = null, string $d, bool $e, c
  * Must not be modified (no params defined).
  */
 function baz($a)
+{
+}
+
+/**
+ * Must not be converted (already using type hints).
+ *
+ * @param int $a
+ *
+ * @return string
+ */
+function bat(int $a): string
 {
 }
 
@@ -87,8 +98,8 @@ namespace foo;
  *
  * @return int
  */
-function test(string $a = null): int
-{
+function test(string $a = null)
+: int{
 }
 
 PHP
@@ -163,8 +174,8 @@ trait BazTrait
      *
      * @return \DateTime
      */
-    protected function inTrait(int $a): \DateTime
-    {
+    protected function inTrait(int $a)
+    : \DateTime{
     }
 }
 
@@ -195,8 +206,8 @@ class Child extends Foo implements BarInterface
     /**
      * {@inheritdoc}
      */
-    public function baz(array $a, int $b): float
-    {
+    public function baz(array $a, int $b)
+    : float{
     }
 }
 

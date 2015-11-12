@@ -62,7 +62,7 @@ class ConvertCommand extends Command
         $converter = new Converter();
 
         foreach ($project->getFiles() as $file) {
-            echo $converter->convert($project, $file);
+            file_put_contents($file->getPath(), $converter->convert($project, $file));
         }
     }
 }

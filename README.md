@@ -14,7 +14,7 @@ Please [report](https://github.com/dunglas/phpdoc-to-typehint/issues) any bug yo
 ## Install and usage
 
 1. [Download the latest PHAR file](https://github.com/dunglas/phpdoc-to-typehint/releases)
-2. Run `php phpdoc-to-typehint.phar <your-project-directory>
+2. Run `php phpdoc-to-typehint.phar <your-project-directory>`
 
 You're project should have scalar type hints and return type declarations.
 

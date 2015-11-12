@@ -18,6 +18,40 @@ Please [report](https://github.com/dunglas/phpdoc-to-typehint/issues) any bug yo
 
 You're project should have scalar type hints and return type declarations.
 
+Before:
+
+```php
+<?php
+
+/*
+ * @param int|null $a
+ * @param string   $b
+ *
+ * @return float
+ */
+function bar($a, $b, bool $c, callable $d = null)
+{
+    return 0.0;
+}
+```
+
+After:
+
+```php
+<?php
+
+/*
+ * @param int|null $a
+ * @param string   $b
+ *
+ * @return float
+ */
+function bar(int $a = null, string $b, bool $c, callable $d = null) : float
+{
+    return 0.0;
+}
+```
+
 ## Credits
 
 Created by [Kévin Dunglas](https://dunglas.fr). Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).

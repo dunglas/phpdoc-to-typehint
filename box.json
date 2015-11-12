@@ -1,0 +1,27 @@
+{
+  "directories": ["src/"],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        ".gitignore",
+        ".md",
+        "phpunit",
+        "Tester",
+        "Tests",
+        "tests",
+        "yaml"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "compactors": [
+    "Herrera\\Box\\Compactor\\Json",
+    "Herrera\\Box\\Compactor\\Php"
+  ],
+  "git-version": "package_version",
+  "main": "bin/phpdoc-to-typehint",
+  "output": "phpdoc-to-typehint.phar",
+  "stub": true,
+  "chmod": "0755"
+}

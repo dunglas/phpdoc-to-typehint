@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Dunglas\PhpDocToTypeHint;
 
 use phpDocumentor\Reflection\Php\ProjectFactory;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -61,8 +62,18 @@ class ConvertCommand extends Command
         $project = ProjectFactory::createInstance()->create('current', $files);
         $converter = new Converter();
 
+        $output->writeln('<comment>Running the PHPDoc to Type Hint converter. Brought to you by Kévin Dunglas and Les-Tilleuls.coop.</comment>');
+
+        $progress = new ProgressBar($output, count($files));
+
         foreach ($project->getFiles() as $file) {
             file_put_contents($file->getPath(), $converter->convert($project, $file));
+            $progress->advance();
         }
+
+        $progress->finish();
+        $output->writeln('');
+
+        $output->writeln('<info>Conversion done.</info>');
     }
 }

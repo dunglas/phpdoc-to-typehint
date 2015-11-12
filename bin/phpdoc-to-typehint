@@ -10,7 +10,15 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+if (PHP_VERSION_ID < 70000) {
+    file_put_contents('php://stderr', sprintf(
+        "The PHPDoc to Type Hint converter requires PHP 7.0 version or higher and your system has\n".
+        "PHP %s version installed.\n\n".
+        "To solve this issue, upgrade your PHP installation.\n\n",
+        PHP_VERSION
+    ));
+    exit(1);
+}
 
 function includeIfExists($file)
 {
@@ -28,5 +36,5 @@ if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader
     exit(1);
 }
 
-$application = new \Dunglas\PhpDocToTypeHint\Application();
+$application = new \Dunglas\PhpDocToTypeHint\Application('PHPDoc to Type Hint converter', '0.1.0-DEV');
 $application->run();

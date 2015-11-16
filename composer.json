@@ -16,6 +16,7 @@
     "symfony/finder": "^2.7.0",
     "phpdocumentor/reflection": "^2.0@dev",
     "phpdocumentor/reflection-common": "^1.0@dev",
-    "phpdocumentor/reflection-docblock": "^3.0@dev"
+    "phpdocumentor/reflection-docblock": "^3.0@dev",
+    "sebastian/diff": "^1.3"
   }
 }

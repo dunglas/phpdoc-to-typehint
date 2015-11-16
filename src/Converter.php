@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Dunglas\PhpDocToTypeHint;
 
@@ -309,6 +309,7 @@ class Converter
     private function getNamespace(Fqsen $fqsen): string
     {
         $value = $fqsen->__toString();
+
         return substr($value, 0, strrpos($value, '\\'));
     }
 

@@ -284,7 +284,7 @@ class Converter
                         }
 
                         $parentFqsen = $obj->getParent();
-                        if (!$parent = $this->getObject($project, $parentFqsen, self::OBJECT_CLASS)) {
+                        if (null === $parentFqsen || !$parent = $this->getObject($project, $parentFqsen, self::OBJECT_CLASS)) {
                             return;
                         }
 

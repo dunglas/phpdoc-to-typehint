@@ -120,6 +120,10 @@ namespace bar;
  */
 class Foo
 {
+    public function bar($foo)
+    {
+    }
+
     /**
      * @param float $a
      */

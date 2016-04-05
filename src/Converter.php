@@ -38,6 +38,19 @@ class Converter
     const OBJECT_FUNCTION = 3;
 
     /**
+     * @link http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+     */
+    const TYPES = [
+        'array',
+        'bool',
+        'callable',
+        'float',
+        'int',
+        'self',
+        'string',
+    ];
+
+    /**
      * Converts the given file.
      *
      * @param Project $project
@@ -446,13 +459,43 @@ class Converter
     }
 
     /**
-     * Gets the type of the parameter or null if it is not defined.
+     * Gets the parameter type and applies a whitelist of PHPs supported types
+     *
+     * The whitelist is only applied for all-lowercase character; everything
+     * else is considered to be a class name.
      *
      * @param Tag $tag
      *
      * @return array
      */
     private function getType(Tag $tag): array
+    {
+        $type = $this->getTypeFromTag($tag);
+
+        if (!$type) {
+            return $type;
+        }
+
+        $typeDesc = $type[0];
+
+        if ($typeDesc === strtolower($typeDesc)) {
+            // match all-lowercase types against known types
+            if (!in_array($typeDesc, static::TYPES)) {
+                return [];
+            }
+        }
+
+        return $type;
+    }
+
+    /**
+     * Gets the type of the parameter or an empty array if it is not defined.
+     *
+     * @param Tag $tag
+     *
+     * @return array
+     */
+    private function getTypeFromTag(Tag $tag): array
     {
         $type = $tag->getType();
 

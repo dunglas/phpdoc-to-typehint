@@ -105,7 +105,15 @@ class Converter
                             $return = $this->getReturn($project, $objectType, $namespace, $object, $function);
 
                             if ($return && $return[0] && !$return[1]) {
+                                if ($endsInNewLine = $this->endsInNewLine($output)) {
+                                    $output = substr($output, 0, -strlen($endsInNewLine));
+                                }
+
                                 $output .= sprintf(': %s', $return[0]);
+
+                                if ($endsInNewLine) {
+                                    $output .= $endsInNewLine;
+                                }
                             }
 
                             $function = null;
@@ -474,5 +482,27 @@ class Converter
         }
 
         return [$type->__toString(), false];
+    }
+
+    /**
+     * Determines if the string ends in a new line and returns it.
+     *
+     * Will also include additional space/tab character if present, i.e. the
+     * indentation into the next line.
+     *
+     * Returns an empty string if no match was found.
+     *
+     * @param string $output
+     * @return string
+     */
+    private function endsInNewLine(string $output): string
+    {
+        $result = preg_match('/((?:\r\n|\r|\n)[ \t]*)$/', $output, $matches);
+
+        if (0 === $result) {
+            return '';
+        }
+
+        return $matches[1];
     }
 }

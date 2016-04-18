@@ -20,6 +20,7 @@ use phpDocumentor\Reflection\Php\Class_;
 use phpDocumentor\Reflection\Php\File;
 use phpDocumentor\Reflection\Php\Interface_;
 use phpDocumentor\Reflection\Php\Project;
+use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Null_;
 
@@ -484,6 +485,12 @@ class Converter
 
             // Mixed types, cannot guess
             return [];
+        }
+
+        if ($type instanceof Array_) {
+            // May contain more specific type declarations, but we only
+            // convert to pure arrays
+            return ['array', false];
         }
 
         return [$type->__toString(), false];

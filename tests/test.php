@@ -220,4 +220,21 @@ PHP
     }
 }
 
+$projectFactory = ProjectFactory::createInstance();
+$project = $projectFactory->create('paramNoType', [__DIR__.'/Fixtures/param_no_type.php']);
+
+foreach ($project->getFiles() as $path => $file) {
+    same(<<<'PHP'
+<?php
+/**
+ * @param $noType
+ */
+function param_no_type($noType)
+{
+}
+
+PHP
+        , $converter->convert($project, $file));
+}
+
 echo 'Good job! Everything is fine.'.PHP_EOL;

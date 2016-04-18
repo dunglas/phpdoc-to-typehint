@@ -455,6 +455,11 @@ class Converter
     {
         $type = $tag->getType();
 
+        if (null === $type) {
+            // No type specified
+            return [];
+        }
+
         if ($type instanceof Compound) {
             if ($type->has(2)) {
                 // Several types, cannot guess

@@ -238,7 +238,7 @@ PHP
 }
 
 $projectFactory = ProjectFactory::createInstance();
-$project = $projectFactory->create('paramNoType', [__DIR__.'/Fixtures/array_no_types.php']);
+$project = $projectFactory->create('arrayNoTypes', [__DIR__.'/Fixtures/array_no_types.php']);
 
 foreach ($project->getFiles() as $path => $file) {
     $expected = <<<'PHP'
@@ -251,6 +251,31 @@ foreach ($project->getFiles() as $path => $file) {
  * @return float[]
  */
 function array_no_types(array $ints, array $strings, array $someClasses) : array{
+}
+
+PHP;
+    same($expected, $converter->convert($project, $file));
+}
+
+
+$projectFactory = ProjectFactory::createInstance();
+$project = $projectFactory->create('typeAliasesWhitelisting', [__DIR__.'/Fixtures/type_aliases_and_whitelisting.php']);
+
+foreach ($project->getFiles() as $path => $file) {
+    $expected = <<<'PHP'
+<?php
+/**
+ * @param integer $integer
+ * @param boolean $boolean
+ * @param real $real
+ * @param double $double
+ * @param callback $callback
+ * @param void $void
+ * @param mixed $mixed
+ * @param unknown $unknown
+ * @param Class $class
+ */
+function aliases(int $integer, bool $boolean, $real, float $double, callable $callback, $void, $mixed, $unkown, \Class $class) {
 }
 
 PHP;

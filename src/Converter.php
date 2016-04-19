@@ -38,6 +38,19 @@ class Converter
     const OBJECT_FUNCTION = 3;
 
     /**
+     * @link http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+     */
+    const TYPES = [
+        'array',
+        'bool',
+        'callable',
+        'float',
+        'int',
+        'self',
+        'string',
+    ];
+
+    /**
      * Converts the given file.
      *
      * @param Project $project
@@ -446,13 +459,44 @@ class Converter
     }
 
     /**
-     * Gets the type of the parameter or null if it is not defined.
+     * Gets the parameter type and tries to find best-matching PHP type
+     *
+     * Commonly used type aliases are normalized and a whitelist for
+     * all-lowercase types is applied.
      *
      * @param Tag $tag
      *
      * @return array
      */
     private function getType(Tag $tag): array
+    {
+        $type = $this->getTypeFromTag($tag);
+
+        if (!$type) {
+            return $type;
+        }
+
+        $typeDesc = $type[0];
+
+        if ($typeDesc === strtolower($typeDesc)) {
+            $typeDesc = $this->normalizeType($typeDesc);
+            // match all-lowercase types against known types
+            if (!in_array($typeDesc, static::TYPES)) {
+                return [];
+            }
+        }
+
+        return $type;
+    }
+
+    /**
+     * Gets the type of the parameter or an empty array if it is not defined.
+     *
+     * @param Tag $tag
+     *
+     * @return array
+     */
+    private function getTypeFromTag(Tag $tag): array
     {
         $type = $tag->getType();
 
@@ -516,5 +560,36 @@ class Converter
         }
 
         return $matches[1];
+    }
+
+     /**
+     * Normalizes the type.
+     *
+     * @link https://github.com/symfony/symfony/blob/d2d8d17a8068d76f42c42c7791f45ca68f4f98a4/src/Symfony/Component/PropertyInfo/Extractor/PhpDocExtractor.php#L317-L346
+     * @license https://github.com/symfony/symfony/blob/d2d8d17a8068d76f42c42c7791f45ca68f4f98a4/src/Symfony/Component/PropertyInfo/LICENSE
+     *
+     * @param string $docType
+     *
+     * @return string
+     */
+    private function normalizeType($docType)
+    {
+        switch ($docType) {
+            case 'integer':
+                return 'int';
+
+            case 'boolean':
+                return 'bool';
+
+            // real is not part of the PHPDoc standard, so we ignore it
+            case 'double':
+                return 'float';
+
+            case 'callback':
+                return 'callable';
+
+            default:
+                return $docType;
+        }
     }
 }

@@ -26,6 +26,8 @@ Before:
 /**
  * @param int|null $a
  * @param string   $b
+ * @param bool     $c
+ * @param callable $d
  *
  * @return float
  */
@@ -43,6 +45,8 @@ After:
 /**
  * @param int|null $a
  * @param string   $b
+ * @param bool     $c
+ * @param callable $d
  *
  * @return float
  */

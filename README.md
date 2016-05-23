@@ -23,7 +23,7 @@ Before:
 ```php
 <?php
 
-/*
+/**
  * @param int|null $a
  * @param string   $b
  *
@@ -40,7 +40,7 @@ After:
 ```php
 <?php
 
-/*
+/**
  * @param int|null $a
  * @param string   $b
  *

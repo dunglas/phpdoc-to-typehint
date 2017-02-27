@@ -15,7 +15,7 @@ install:
    - php box.phar build
 
 script:
-   - tests/test.php
+   - vendor/bin/phpunit tests
 
 deploy:
   provider: releases

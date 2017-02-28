@@ -88,6 +88,7 @@ final class ConverterTest extends TestCase
             ['paramNoType', 'param_no_type.php'],
             ['arrayNoTypes', 'array_no_types.php'],
             ['typeAliasesWhitelisting', 'type_aliases_and_whitelisting.php'],
+            ['passByReference', 'pass_by_reference.php'],
         ];
     }
 }

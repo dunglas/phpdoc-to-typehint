@@ -70,6 +70,7 @@ class Converter
         $outputTypeHint = true;
         $outputDefaultValue = false;
         $outputReturn = true;
+        $paramByReference = false;
         $namespace = null;
         $object = null;
         $function = null;
@@ -77,6 +78,8 @@ class Converter
 
         foreach ($tokens as $token) {
             if (is_string($token)) {
+                $outputToken = true;
+
                 switch ($token) {
                     case '(':
                         if ($outsideFunctionSignature) {
@@ -104,6 +107,13 @@ class Converter
                     case ',':
                         if ($insideFunctionSignature && $outputDefaultValue) {
                             $output .= ' = null';
+                        }
+                        break;
+
+                    case '&':
+                        if ($insideFunctionSignature) {
+                            $paramByReference = true;
+                            $outputToken = false;
                         }
                         break;
 
@@ -152,12 +162,21 @@ class Converter
                         break;
                 }
 
-                $output .= $token;
+                if ($outputToken) {
+                    $output .= $token;
+                }
 
                 continue;
             }
 
             list($id, $text) = $token;
+
+            if ($paramByReference && $id !== T_VARIABLE) {
+                // Not an actual argument passed by reference,
+                // only an ampersand in a function signature
+                $output .= '&';
+                $paramByReference = false;
+            }
 
             switch ($id) {
                 case T_NAMESPACE:
@@ -227,10 +246,20 @@ class Converter
                                 $outputDefaultValue = (bool) $parameter[1];
                             }
 
+                            if ($paramByReference) {
+                                $output .= '&';
+                                $paramByReference = false;
+                            }
+
                             $output .= $text;
                             $outputTypeHint = true;
 
                             continue 2;
+                        }
+
+                        if ($paramByReference) {
+                            $output .= '&';
+                            $paramByReference = false;
                         }
 
                         $outputTypeHint = true;

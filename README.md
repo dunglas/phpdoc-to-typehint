@@ -59,6 +59,7 @@ Supports:
 * methods of classes and traits
 * method definitions in interfaces
 * PHPDoc inheritance
+* PHP 7.1 nullable types (`--nullable-types` option)
 
 ## Credits
 

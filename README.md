@@ -4,7 +4,6 @@
 using existing PHPDoc annotations.
 
 [![Build Status](https://travis-ci.org/dunglas/phpdoc-to-typehint.svg?branch=master)](https://travis-ci.org/dunglas/phpdoc-to-typehint)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/phpdoc-to-typehint/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/phpdoc-to-typehint/?branch=master)
 
 **Warning**: this project is an early stage of development. It **can** damage your code.
 Be sure to make a backup before running this command and to run your test suite after.

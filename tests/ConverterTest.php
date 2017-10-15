@@ -82,6 +82,7 @@ final class ConverterTest extends TestCase
         return [
             ['functions1', 'functions1.php'],
             ['functions2', 'functions2.php'],
+            ['functions3', 'functions3.php'],
             ['classFoo', 'Foo.php'],
             ['interfaceBar', 'BarInterface.php'],
             ['traitBaz', 'BazTrait.php'],

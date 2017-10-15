@@ -85,6 +85,7 @@ class Converter
                         if ($outsideFunctionSignature) {
                             $insideFunctionSignature = true;
                             $outsideFunctionSignature = false;
+                            $outputTypeHint = true;
                         }
                         break;
 

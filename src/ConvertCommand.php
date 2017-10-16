@@ -55,7 +55,7 @@ class ConvertCommand extends Command
             ->setDescription('Convert files')
             ->addOption('exclude', 'e', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Directories to exclude', ['vendor'])
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Displays diff instead of modifying files')
-            ->addOption('nullable-types', null, InputOption::VALUE_NONE, 'Uses nullable types (PHP 7.1+) instead of `null` default value')
+            ->addOption('no-nullable-types', null, InputOption::VALUE_NONE, 'Uses a default `null` value instead of PHP 7.1 nullable types')
             ->addArgument('input', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Input directories', ['.'])
         ;
     }
@@ -88,7 +88,7 @@ class ConvertCommand extends Command
         $changed = [];
         foreach ($project->getFiles() as $file) {
             $old = $file->getSource();
-            $new = $converter->convert($project, $file, $input->getOption('nullable-types'));
+            $new = $converter->convert($project, $file, !$input->getOption('no-nullable-types'));
 
             if ($new !== $old) {
                 if ($input->getOption('dry-run')) {

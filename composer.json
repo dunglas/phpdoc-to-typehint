@@ -21,5 +21,6 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^6.0"
-  }
+  },
+  "bin": ["bin/phpdoc-to-typehint"]
 }

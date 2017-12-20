@@ -55,10 +55,11 @@ class Converter
      *
      * @param Project $project
      * @param File    $file
+     * @param bool    $nullableTypes
      *
      * @return string
      */
-    public function convert(Project $project, File $file): string
+    public function convert(Project $project, File $file, bool $nullableTypes): string
     {
         $tokens = token_get_all($file->getSource());
 
@@ -129,12 +130,12 @@ class Converter
                         if (null !== $function && $outputReturn) {
                             $return = $this->getReturn($project, $objectType, $namespace, $object, $function);
 
-                            if ($return && $return[0] && !$return[1]) {
+                            if ($return && $return[0] && (!$return[1] || $nullableTypes)) {
                                 if ($endsInNewLine = $this->endsInNewLine($output)) {
                                     $output = substr($output, 0, -strlen($endsInNewLine));
                                 }
 
-                                $output .= sprintf(': %s', $return[0]);
+                                $output .= sprintf(': %s%s', $return[1] ? '?' : '', $return[0]);
 
                                 if ($endsInNewLine) {
                                     $output .= $endsInNewLine;
@@ -242,9 +243,13 @@ class Converter
                             $parameter = $this->getParameter($project, $objectType, $namespace, $object, $function, $text);
 
                             if ($parameter) {
-                                $output .= $parameter[0].' ';
-
                                 $outputDefaultValue = (bool) $parameter[1];
+                                if ($outputDefaultValue && $nullableTypes) {
+                                    $output .= '?';
+                                    $outputDefaultValue = false;
+                                }
+
+                                $output .= $parameter[0].' ';
                             }
 
                             if ($paramByReference) {
@@ -550,10 +555,16 @@ class Converter
             }
 
             if (!$type0 instanceof Null_ && $type1 instanceof Null_) {
+                if ($type0 instanceof Array_) {
+                    return ['array', true];
+                }
                 return [$type0->__toString(), true];
             }
 
             if (!$type1 instanceof Null_ && $type0 instanceof Null_) {
+                if ($type1 instanceof Array_) {
+                    return ['array', true];
+                }
                 return [$type1->__toString(), true];
             }
 

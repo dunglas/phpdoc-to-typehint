@@ -35,7 +35,7 @@ final class ConverterTest extends TestCase
     /**
      * @dataProvider filesProvider
      */
-    public function testSingleFiles(string $projectName, string $fileName)
+    public function testSingleFiles(string $projectName, string $fileName, bool $nullableTypes = null)
     {
         $projectFactory = ProjectFactory::createInstance();
         $project = $projectFactory->create(
@@ -46,7 +46,7 @@ final class ConverterTest extends TestCase
         foreach ($project->getFiles() as $file) {
             $this->assertStringEqualsFile(
                 __DIR__.'/Results/'.$fileName,
-                self::$converter->convert($project, $file)
+                self::$converter->convert($project, $file, $nullableTypes !== null ? $nullableTypes : false)
             );
         }
     }
@@ -68,14 +68,14 @@ final class ConverterTest extends TestCase
             if ($childPath === $path) {
                 $this->assertStringEqualsFile(
                     __DIR__.'/Results/Child.php',
-                    self::$converter->convert($project, $file)
+                    self::$converter->convert($project, $file, false)
                 );
             }
         }
     }
 
     /**
-     * @return string[][]
+     * @return array[]
      */
     public function filesProvider(): array
     {
@@ -90,6 +90,7 @@ final class ConverterTest extends TestCase
             ['arrayNoTypes', 'array_no_types.php'],
             ['typeAliasesWhitelisting', 'type_aliases_and_whitelisting.php'],
             ['passByReference', 'pass_by_reference.php'],
+            ['nullableTypes', 'nullable_types.php', true],
         ];
     }
 }

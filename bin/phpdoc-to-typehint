@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+use Dunglas\PhpDocToTypeHint\ConvertCommand;
+use Symfony\Component\Console\Application;
+
 /*
  * This file is part of the PHPDoc to Type Hint package.
  *
@@ -36,5 +39,7 @@ if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader
     exit(1);
 }
 
-$application = new \Dunglas\PhpDocToTypeHint\Application('PHPDoc to Type Hint converter', '0.1.0-DEV');
+$application = new Application('PHPDoc to Type Hint converter', '0.1.0-DEV');
+$application->add(new ConvertCommand());
+$application->setDefaultCommand('convert', true);
 $application->run();

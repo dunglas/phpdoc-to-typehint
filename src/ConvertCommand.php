@@ -38,11 +38,11 @@ class ConvertCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function __construct($name = null)
+    public function __construct()
     {
         $this->differ = new Differ();
 
-        parent::__construct($name);
+        parent::__construct();
     }
 
     /**

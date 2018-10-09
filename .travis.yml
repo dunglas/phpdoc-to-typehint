@@ -8,14 +8,16 @@ php:
   - 7
 
 before_install:
-   - curl -LSs https://box-project.github.io/box2/installer.php | php
+   - wget -O box.phar https://github.com/humbug/box/releases/download/3.1.0/box.phar
 
 install:
    - composer install
-   - php box.phar build
+   - php box.phar validate
 
 script:
    - vendor/bin/phpunit tests
+   - php box.phar compile
+   - php phpdoc-to-typehint.phar -V
 
 deploy:
   provider: releases

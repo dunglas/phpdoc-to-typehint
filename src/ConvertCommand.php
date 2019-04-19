@@ -13,6 +13,7 @@ declare (strict_types = 1);
 
 namespace Dunglas\PhpDocToTypeHint;
 
+use phpDocumentor\Reflection\File\LocalFile;
 use phpDocumentor\Reflection\Php\ProjectFactory;
 use SebastianBergmann\Diff\Differ;
 use Symfony\Component\Console\Command\Command;
@@ -74,7 +75,7 @@ class ConvertCommand extends Command
 
         $files = [];
         foreach ($finder as $file) {
-            $files[] = $file->getRealpath();
+            $files[] = new LocalFile($file->getRealpath());
         }
 
         $project = ProjectFactory::createInstance()->create('current', $files);

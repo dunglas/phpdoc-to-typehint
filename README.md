@@ -1,6 +1,6 @@
 # PHPDoc to Type Hint
 
-**Archived!** This repository is now archived. Consider using [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (and espacially the 
+**Archived!** This repository is now archived. Consider using [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (and especially the 
 `phpdoc_to_param_type` and `phpdoc_to_return_type` rules) or [Rector](https://tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/) instead.
 
 `phpdoc-to-typehint` adds automatically scalar type hints and return types to all functions and methods of a PHP project
